@@ -1,7 +1,7 @@
-package tests.pageobjects.chain;
+package tests.demoqa.pageobjects.chain;
 
 import org.junit.jupiter.api.Test;
-import tests.TestBase;
+import tests.demoqa.TestBase;
 
 public class StudentRegistrationFormTests extends TestBase {
     StudentRegistrationPage studentRegistrationPage;

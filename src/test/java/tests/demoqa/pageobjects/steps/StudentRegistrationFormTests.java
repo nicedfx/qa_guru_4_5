@@ -1,44 +1,47 @@
-package tests.pageobjects.chain;
+package tests.demoqa.pageobjects.steps;
+
+import org.junit.jupiter.api.Test;
+import tests.demoqa.TestBase;
 
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.*;
 
-public class StudentRegistrationPage {
+public class StudentRegistrationFormTests extends TestBase {
+    StudentRegistrationPage studentRegistrationPage;
 
-    String firstName = "Alex",
-            lastName = "Alexov",
-            email = "aa@aa.com",
-            gender = "Other",
-            mobile = "1234567890",
-            dayOfBirth = "10",
-            monthOfBirth = "May",
-            yearOfBirth = "1988",
-            subject1 = "Chemistry",
-            subject2 = "Commerce",
-            hobby1 = "Sports",
-            hobby2 = "Reading",
-            hobby3 = "Music",
-            picture = "1.png",
-            currentAddress = "Montenegro 123",
-            state = "Uttar Pradesh",
-            city = "Merrut";
+    @Test
+    void successfulFillFormTest() {
+        studentRegistrationPage = new StudentRegistrationPage();
 
-    public StudentRegistrationPage openPage() {
+        String firstName = "Alex",
+                lastName = "Alexov",
+                email = "aa@aa.com",
+                gender = "Other",
+                mobile = "1234567890",
+                dayOfBirth = "10",
+                monthOfBirth = "May",
+                yearOfBirth = "1988",
+                subject1 = "Chemistry",
+                subject2 = "Commerce",
+                hobby1 = "Sports",
+                hobby2 = "Reading",
+                hobby3 = "Music",
+                picture = "1.png",
+                currentAddress = "Montenegro 123",
+                state = "Uttar Pradesh",
+                city = "Merrut";
+
         open("https://demoqa.com/automation-practice-form");
-        $(".practice-form-wrapper").shouldHave(text("Student Registration Form"));
+        studentRegistrationPage.checkPageHeader("Student Registration Form");
 
-        return this;
-    }
-
-    public StudentRegistrationPage fillForm() {
-        $("#firstName").val(firstName);
+        studentRegistrationPage.setFirstName(firstName);
         $("#lastName").val(lastName);
         $("#userEmail").val(email);
         $("#genterWrapper").$(byText(gender)).click();
         $("#userNumber").val(mobile);
         // set date
-        setBirthDate(yearOfBirth, monthOfBirth, dayOfBirth);
+        studentRegistrationPage.setBirthDate(yearOfBirth, monthOfBirth, dayOfBirth);
         // set subject
         $("#subjectsInput").val(subject1);
         $(".subjects-auto-complete__menu-list").$(byText(subject1)).click();
@@ -61,17 +64,7 @@ public class StudentRegistrationPage {
         $("#submit").click();
         $("#example-modal-sizes-title-lg").shouldHave(text("Thanks for submitting the form"));
 
-        return this;
-    }
-
-    public void setBirthDate(String year, String month, String day) {
-        $("#dateOfBirthInput").clear();
-        $(".react-datepicker__month-select").selectOption(month);
-        $(".react-datepicker__year-select").selectOption(year);
-        $(".react-datepicker__day--0" + day).click();
-    }
-
-    public void checkData() {
+        // asserts
         $x("//td[text()='Student Name']").parent().shouldHave(text(firstName + " " + lastName));
         $x("//td[text()='Student Email']").parent().shouldHave(text(email));
         $x("//td[text()='Gender']").parent().shouldHave(text(gender));
