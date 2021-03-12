@@ -1,50 +1,45 @@
-package tests;
-
-import org.junit.jupiter.api.Test;
-import tests.TestBase;
+package tests.demoqa.pageobjects.scenarios;
 
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.*;
 
-public class StudentRegistrationFormTests extends TestBase {
+public class StudentRegistrationPage {
 
-    @Test
-    void successfulFillFormTest() {
-        String firstName = "Alex",
-                lastName = "Alexov",
-                email = "aa@aa.com",
-                gender = "Other",
-                mobile = "1234567890",
-                dayOfBirth = "10",
-                monthOfBirth = "May",
-                yearOfBirth = "1988",
-                subject1 = "Chemistry",
-                subject2 = "Commerce",
-                hobby1 = "Sports",
-                hobby2 = "Reading",
-                hobby3 = "Music",
-                picture = "1.png",
-                currentAddress = "Montenegro 123",
-                state = "Uttar Pradesh",
-                city = "Merrut";
+    String firstName = "Alex",
+            lastName = "Alexov",
+            email = "aa@aa.com",
+            gender = "Other",
+            mobile = "1234567890",
+            dayOfBirth = "10",
+            monthOfBirth = "May",
+            yearOfBirth = "1988",
+            subject1 = "Chemistry",
+            subject2 = "Commerce",
+            hobby1 = "Sports",
+            hobby2 = "Reading",
+            hobby3 = "Music",
+            picture = "1.png",
+            currentAddress = "Montenegro 123",
+            state = "Uttar Pradesh",
+            city = "Merrut";
 
+    public void openPage() {
         open("https://demoqa.com/automation-practice-form");
         $(".practice-form-wrapper").shouldHave(text("Student Registration Form"));
+    }
 
+    public void fillForm() {
         $("#firstName").val(firstName);
         $("#lastName").val(lastName);
         $("#userEmail").val(email);
-        $(byText("Male")).click();
+        $("#genterWrapper").$(byText(gender)).click();
         $("#userNumber").val(mobile);
         // set date
-        $("#dateOfBirthInput").clear();
-        $(".react-datepicker__month-select").selectOption(monthOfBirth);
-        $(".react-datepicker__year-select").selectOption(yearOfBirth);
-        $(".react-datepicker__day--0" + dayOfBirth).click();
+        setBirthDate(yearOfBirth, monthOfBirth, dayOfBirth);
         // set subject
-        $("#subjectsInput").setValue(subject1).pressEnter();
-//        $(".subjects-auto-complete__menu-list").$(byText(subject1)).click();
+        $("#subjectsInput").val(subject1);
+        $(".subjects-auto-complete__menu-list").$(byText(subject1)).click();
         $("#subjectsInput").val(subject2);
         $(".subjects-auto-complete__menu-list").$(byText(subject2)).click();
         // set hobbies
@@ -52,7 +47,6 @@ public class StudentRegistrationFormTests extends TestBase {
         $("#hobbiesWrapper").$(byText(hobby2)).click();
         $("#hobbiesWrapper").$(byText(hobby3)).click();
         // upload image
-//        $("#uploadPicture").uploadFile(new File("src/test/resources/img/" + picture));
         $("#uploadPicture").uploadFromClasspath("img/" + picture);
         // set current address
         $("#currentAddress").val(currentAddress);
@@ -64,11 +58,16 @@ public class StudentRegistrationFormTests extends TestBase {
 
         $("#submit").click();
         $("#example-modal-sizes-title-lg").shouldHave(text("Thanks for submitting the form"));
+    }
 
-        // asserts
-//        $(".table-responsive").shouldHave(text(firstName + " " + lastName),
-//                text(email), text(gender));
-//        $(".table-responsive").$(byText("Student Name")).parent().shouldHave(text(firstName + " " + lastName));
+    public void setBirthDate(String year, String month, String day) {
+        $("#dateOfBirthInput").clear();
+        $(".react-datepicker__month-select").selectOption(month);
+        $(".react-datepicker__year-select").selectOption(year);
+        $(".react-datepicker__day--0" + day).click();
+    }
+
+    public void checkData() {
         $x("//td[text()='Student Name']").parent().shouldHave(text(firstName + " " + lastName));
         $x("//td[text()='Student Email']").parent().shouldHave(text(email));
         $x("//td[text()='Gender']").parent().shouldHave(text(gender));
